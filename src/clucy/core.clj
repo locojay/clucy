@@ -1,7 +1,7 @@
 (ns clucy.core
   (:import (java.io StringReader File)
            (org.apache.lucene.analysis.standard StandardAnalyzer)
-           (org.apache.lucene.document Document Field Field$Index Field$Store)
+           (org.apache.lucene.document Document Field Field$Index Field$Store Field$TermVector)
            (org.apache.lucene.index IndexWriter IndexWriter$MaxFieldLength Term)
            (org.apache.lucene.queryParser QueryParser)
            (org.apache.lucene.search BooleanClause BooleanClause$Occur
@@ -62,7 +62,10 @@
                        [false false] Field$Index/ANALYZED
                        [true false] Field$Index/NOT_ANALYZED
                        [false true] Field$Index/ANALYZED_NO_NORMS
-                       [true true] Field$Index/NOT_ANALYZED_NO_NORMS))))))
+                       [true true] Field$Index/NOT_ANALYZED_NO_NORMS))
+                   (if (false? (:termvector meta-map))
+                     Field$TermVector/NO
+                     Field$TermVector/YES)))))
 
 (defn- map-stored
   "Returns a hash-map containing all of the values in the map that
